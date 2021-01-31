@@ -2,20 +2,20 @@
 
 Task HC_SR04_Task(50); // Every 50 ms / 20 Hz
 
-volatile unsigned int pwm_value = 0;
-volatile unsigned int prev_time = 0;
-const byte interruptPin = 3;
-const int trigPin = 4;
+volatile uint32_t pwm_value = 0;
+volatile uint32_t prev_time = 0;
+const uint8_t echoPin = 3;
+const uint8_t trigPin = 4;
 
 float sound_speed = 0.017; // half of cm/mu s
 
 void setup()
 {
   Serial.begin(115200);
-  pinMode(interruptPin, INPUT_PULLUP);
+  pinMode(echoPin, INPUT_PULLUP);
   //pinMode(interruptPin, INPUT);
   pinMode(trigPin, OUTPUT); 
-  attachInterrupt(digitalPinToInterrupt(interruptPin), rising, RISING);
+  attachInterrupt(digitalPinToInterrupt(echoPin), rising, RISING);
 }
  
 void loop() 
@@ -37,12 +37,12 @@ void loop()
 }
  
 void rising() {
-  attachInterrupt(digitalPinToInterrupt(interruptPin), falling, FALLING);
+  attachInterrupt(digitalPinToInterrupt(echoPin), falling, FALLING);
   prev_time = micros();
 }
  
 void falling() {
-  attachInterrupt(digitalPinToInterrupt(interruptPin), rising, RISING);
+  attachInterrupt(digitalPinToInterrupt(echoPin), rising, RISING);
   pwm_value = micros()-prev_time;
   //Serial.println(pwm_value);
 
